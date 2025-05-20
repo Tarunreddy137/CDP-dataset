@@ -81,3 +81,9 @@ project-root/
 ├── pipeline_runner.py
 └── README.md
 
+Sample Output Preview
+
+eventType	                sourceID      timestamp	        listSourceID	webURL	geoCity
+leadOperation.newLead	     3895746	  2024-08-03T01:13:29Z	NaN	            NaN	     NaN
+listOperation.addToList	     3895746	  2024-08-03T01:13:31Z	2694	        NaN	     NaN
+web.webpagedetails.pageViews 4931638	  2024-10-01T12:01:40Z	NaN	/microscopy/.../lattice-sim-3.html	Atlanta
