@@ -1,89 +1,118 @@
-# 🧱 JSON to Structured CSV Pipeline
+## Data Ingestion Pipeline for Non-Numerical SQL Data ##
 
-This repository demonstrates a complete data pipeline that transforms **unstructured JSON data** into **structured CSV output**, following a modular and production-ready architecture.
+## Overview ##
 
----
+This project defines a standardized pipeline to ingest and transform non-numerical, unstructured SQL data into a structured format ready for downstream analytics, reporting, and storage. It includes key components such as ingestion, preprocessing, metrics logging, and structured data output.
 
-## 🧭 Architecture Overview
+## Data Ingestion Layer ##
 
+The ingestion layer handles the extraction and transformation of raw, unstructured SQL data into a tabular format.
 
-### 1. **Raw Files**
-- Location: `data/raw/samplefile.json`
-- The JSON contains multiple nested events from a customer activity dataset.
-- Fields include: `eventType`, `personKey`, `timestamp`, `web`, `listOperations`, etc.
+# Key Steps:
+Load raw SQL text data from source files (e.g., .sql, .txt, .json).
+Parse non-numerical values such as text, categorical fields, status messages, and unstructured descriptions.
+Flatten and extract relevant fields from nested or complex entries.
+Convert parsed content into a structured tabular representation (e.g., DataFrame).
+Validate the integrity of parsed records and log ingestion metadata.
+Store the structured records temporarily in a staging area or directly to a database or file.
+# Supported Sources:
+SQL dump files
+Unstructured logs with SQL-like text
+API responses or raw database extracts
 
----
+## Preprocessing Layer ##
 
-### 2. **Ingestion**
-- Reads the JSON file into memory.
-- Uses Python's `json` module to parse the file.
-- Target Path: `scripts/extract/extract_json.py`
+The preprocessing stage cleans and transforms the ingested data to ensure consistency, quality, and readiness for downstream use.
 
-```python
-import json
+# Key Operations:
+Remove duplicate records
+Normalize text (lowercase, trim whitespace, remove special characters)
+Parse and reformat date or timestamp fields
+Validate and correct inconsistent categorical fields
+Extract meaningful tokens from long-form text (e.g., keywords, tags)
+Perform data type conversions and column reordering
+Standardize column names (e.g., snake_case)
 
-def ingest_json(filepath):
-    with open(filepath, 'r') as f:
-        return json.load(f)
+## Pipeline Metrics ##
 
-### 3. **Processing**
-- Flattens nested fields from each record:
-  - `eventType`
-  - `timestamp`
-  - `sourceID`
-  - `listKey`
-  - `webPageDetails`
-  - `geo location`, etc.
-- Converts nested records into a flat tabular format (rows and columns).
+To ensure reliability and observability, the pipeline captures standard metrics throughout the execution process.
 
-### 4. **Validation**
-- Ensures required fields are present (e.g., `eventType`, `timestamp`).
-- Optional checks:
-  - Null/missing value detection.
-  - Timestamp formatting.
-  - ID consistency.
+ # Tracked Metrics:
+Metric Name	         Description
+records_ingested	Total number of raw records read
+records_parsed	        Successfully parsed and structured records
+records_failed	        Number of records with errors during parsing
+duplicate_count	        Number of duplicate records identified and dropped
+null_field_count	Count of missing or null values per column
+processing_time_sec	Time taken for pipeline execution
+pipeline_status	         Status of the ingestion run (Success/Fail)
+log_path	         Path to full logs for debugging and auditing
 
-### 5. **Storage**
-- Saves the final structured DataFrame into CSV format.
-- CSV stored in the `data/processed/` directory.
-- Optional: load into SQLite or other RDBMS.
+Optional Monitoring Integrations:
+Logging: Python logging module or structured logs
+Monitoring: Prometheus + Grafana, ELK Stack
+Workflow tracking: Airflow, Prefect, or Dagster
 
-### 6. **Output**
-- Final output: Cleaned and structured CSV file.
-- Ready for use in analytics, dashboards, or downstream ETL tools.
+## Structured Output Layer ## 
 
----
+The final output is a cleaned, validated, and structured dataset saved in a standardized format.
 
-## ▶️ How to Run
+# Output Format Options:
+CSV
+Parquet
+SQL Table (PostgreSQL, MySQL, SQLite)
+Data warehouse (BigQuery, Snowflake, Redshift)
 
-1. Place your unstructured JSON file inside `data/raw/`.
-2. Run the pipeline:
+# Example Output Schema:
+Column Name	Type	        Description
+user_id	VARCHAR	Unique          identifier for the user
+activity_type	TEXT	        Type of activity performed
+timestamp	TIMESTAMP	Event time in ISO-8601 format
+page_url	TEXT	        Page or resource interacted with
+device_type	TEXT	        Source device (mobile, desktop, etc.)
+description	TEXT	        Extracted and cleaned text from SQL blob
+country	        TEXT	        Location of user activity
 
-```bash
-python pipeline_runner.py
+# Output Destination:
+Stored in local or cloud storage (/output)
+Pushed to database or data lake layer
+Used by downstream systems like BI tools or ML pipelines
 
-### Directory Structure ###
-project-root/
+## Running the Pipeline ##
+
+Prerequisites
+Python 3.8+
+pandas, sqlalchemy, or other dependencies listed in requirements.txt
+Example Usage
+python run_pipeline.py \
+  --input ./data/unstructured_dump.sql \
+  --output ./output/structured_data.csv \
+  --config ./config/field_mapping.yaml
+  
+## Project Structure ##
+
+data_pipeline/
 ├── data/
-│   ├── raw/
-│   │   └── samplefile.json
-│   └── processed/
-│       └── cleaned_data.csv
+│   └── raw_dump.sql
 ├── scripts/
-│   ├── extract/
-│   │   └── extract_json.py
-│   ├── transform/
-│   │   └── clean_transform.py
-│   ├── validate/
-│   │   └── validate.py
-│   └── load/
-│       └── load_to_csv.py
-├── pipeline_runner.py
+│   ├── ingest.py
+│   ├── preprocess.py
+│   └── metrics.py
+├── config/
+│   └── field_mapping.yaml
+├── output/
+│   └── structured_data.csv
+├── logs/
+│   └── pipeline.log
+├── run_pipeline.py
+├── requirements.txt
 └── README.md
 
-Sample Output Preview
 
-eventType	                sourceID      timestamp	        listSourceID	webURL	geoCity
-leadOperation.newLead	     3895746	  2024-08-03T01:13:29Z	NaN	            NaN	     NaN
-listOperation.addToList	     3895746	  2024-08-03T01:13:31Z	2694	        NaN	     NaN
-web.webpagedetails.pageViews 4931638	  2024-10-01T12:01:40Z	NaN	/microscopy/.../lattice-sim-3.html	Atlanta
+## Future Enhancements ##
+
+Add schema registry and version control
+Real-time ingestion support via Kafka
+CI/CD automation for deployment
+Incorporate natural language processing (NLP) for description parsing
+Data quality validation with Great Expectations
