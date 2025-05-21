@@ -3,14 +3,14 @@
 This project defines a standardized pipeline to ingest and transform non-numerical, unstructured SQL data into a structured format ready for downstream analytics, reporting, and storage. It includes key components such as ingestion, preprocessing, metrics logging, and structured data output.
 ## Data Ingestion Layer ##
 The ingestion layer handles the extraction and transformation of raw, unstructured SQL data into a tabular format.
-# Key Steps:
+### Key Steps:
 Load raw SQL text data from source files (e.g., .sql, .txt, .json).
 Parse non-numerical values such as text, categorical fields, status messages, and unstructured descriptions.
 Flatten and extract relevant fields from nested or complex entries.
 Convert parsed content into a structured tabular representation (e.g., DataFrame).
 Validate the integrity of parsed records and log ingestion metadata.
 Store the structured records temporarily in a staging area or directly to a database or file.
-# Supported Sources:
+### Supported Sources:
 SQL dump files
 Unstructured logs with SQL-like text
 API responses or raw database extracts
@@ -19,7 +19,7 @@ API responses or raw database extracts
 
 The preprocessing stage cleans and transforms the ingested data to ensure consistency, quality, and readiness for downstream use.
 
-# Key Operations:
+### Key Operations:
 Remove duplicate records
 Normalize text (lowercase, trim whitespace, remove special characters)
 Parse and reformat date or timestamp fields
@@ -58,22 +58,22 @@ Parquet
 SQL Table (PostgreSQL, MySQL, SQLite)
 Data warehouse (BigQuery, Snowflake, Redshift)
 
-# Example Output Schema:
-Column Name	Type	        Description
-user_id	VARCHAR	Unique          identifier for the user
-activity_type	TEXT	        Type of activity performed
-timestamp	TIMESTAMP	Event time in ISO-8601 format
-page_url	TEXT	        Page or resource interacted with
-device_type	TEXT	        Source device (mobile, desktop, etc.)
-description	TEXT	        Extracted and cleaned text from SQL blob
-country	        TEXT	        Location of user activity
+Example Output Schema:
+Column Name	    Type	                 Description
+user_id	       VARCHAR	Unique         identifier for the user
+activity_type	  TEXT	                 Type of activity performed
+timestamp	     TIMESTAMP	             Event time in ISO-8601 format
+page_url	      TEXT	                 Page or resource interacted with
+device_type	    TEXT	                 Source device (mobile, desktop, etc.)
+description	    TEXT	                 Extracted and cleaned text from SQL blob
+country	        TEXT	                 Location of user activity
 
 # Output Destination:
 Stored in local or cloud storage (/output)
 Pushed to database or data lake layer
 Used by downstream systems like BI tools or ML pipelines
 
-## Running the Pipeline ##
+Running the Pipeline 
 
 Prerequisites
 Python 3.8+
@@ -84,7 +84,7 @@ python run_pipeline.py \
   --output ./output/structured_data.csv \
   --config ./config/field_mapping.yaml
   
-## Project Structure ##
+Project Structure 
 
 data_pipeline/
 ├── data/
