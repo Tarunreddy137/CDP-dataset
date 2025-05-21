@@ -37,16 +37,16 @@ Standardize column names (e.g., snake_case)
 
 To ensure reliability and observability, the pipeline captures standard metrics throughout the execution process.
 
- # Tracked Metrics:
-Metric Name	         Description
-records_ingested	Total number of raw records read
+Tracked Metrics:
+Metric Name	           Description
+records_ingested	      Total number of raw records read
 records_parsed	        Successfully parsed and structured records
 records_failed	        Number of records with errors during parsing
 duplicate_count	        Number of duplicate records identified and dropped
-null_field_count	Count of missing or null values per column
-processing_time_sec	Time taken for pipeline execution
+null_field_count	       Count of missing or null values per column
+processing_time_sec	    Time taken for pipeline execution
 pipeline_status	         Status of the ingestion run (Success/Fail)
-log_path	         Path to full logs for debugging and auditing
+log_path	               Path to full logs for debugging and auditing
 
 Optional Monitoring Integrations:
 Logging: Python logging module or structured logs
