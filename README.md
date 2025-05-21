@@ -1,11 +1,7 @@
 ## Data Ingestion Pipeline for Non-Numerical SQL Data ##
-
 ## Overview ##
-
 This project defines a standardized pipeline to ingest and transform non-numerical, unstructured SQL data into a structured format ready for downstream analytics, reporting, and storage. It includes key components such as ingestion, preprocessing, metrics logging, and structured data output.
-
 ## Data Ingestion Layer ##
-
 The ingestion layer handles the extraction and transformation of raw, unstructured SQL data into a tabular format.
 # Key Steps:
 Load raw SQL text data from source files (e.g., .sql, .txt, .json).
