@@ -7,7 +7,6 @@ This project defines a standardized pipeline to ingest and transform non-numeric
 ## Data Ingestion Layer ##
 
 The ingestion layer handles the extraction and transformation of raw, unstructured SQL data into a tabular format.
-
 # Key Steps:
 Load raw SQL text data from source files (e.g., .sql, .txt, .json).
 Parse non-numerical values such as text, categorical fields, status messages, and unstructured descriptions.
